@@ -60,39 +60,76 @@ def toggle_theme():
 
 
 def create_progress_bar(value: float, max_value: float, label: str) -> go.Figure:
-    """Create a horizontal progress bar using Plotly."""
+    """Create a horizontal progress bar using Plotly with proper theming."""
     percentage = (value / max_value) * 100 if max_value > 0 else 0
+    remaining = max_value - value
+    
+    # Get current theme colors
+    theme = st.session_state.get('theme', 'light')
+    colors = ACCESSIBLE_COLORS[theme]
     
     fig = go.Figure()
     
-    # Background bar
-    fig.add_trace(go.Bar(
-        x=[max_value],
-        y=[label],
-        orientation='h',
-        marker_color='lightgray',
-        name='Total',
-        showlegend=False
-    ))
-    
-    # Progress bar
+    # Create a stacked bar chart for better visual representation
     fig.add_trace(go.Bar(
         x=[value],
         y=[label],
         orientation='h',
-        marker_color=COLORS['primary'],
+        marker=dict(
+            color=COLORS['primary'],
+            line=dict(color=colors['border'], width=1)
+        ),
         name='Completed',
-        showlegend=False
+        showlegend=False,
+        text=f'{value}/{max_value} ECTS ({percentage:.0f}%)',
+        textposition='inside',
+        textfont=dict(color='white', size=12, family='Arial Black'),
+        hovertemplate=f'Completed: {value} ECTS<br>Percentage: {percentage:.1f}%<extra></extra>'
     ))
     
+    # Add remaining portion
+    if remaining > 0:
+        fig.add_trace(go.Bar(
+            x=[remaining],
+            y=[label],
+            orientation='h',
+            marker=dict(
+                color=colors['border'],
+                line=dict(color=colors['border'], width=1),
+                pattern=dict(shape="/", bgcolor=colors['bg'], fgcolor=colors['muted'])
+            ),
+            name='Remaining',
+            showlegend=False,
+            text=f'{remaining} ECTS',
+            textposition='inside',
+            textfont=dict(color=colors['muted'], size=10),
+            hovertemplate=f'Remaining: {remaining} ECTS<extra></extra>'
+        ))
+    
     fig.update_layout(
-        barmode='overlay',
-        height=60,
+        barmode='stack',  # Stack bars instead of overlay
+        height=50,
         margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(showgrid=False, showticklabels=False, zeroline=False),
-        yaxis=dict(showgrid=False, showticklabels=False),
+        xaxis=dict(
+            showgrid=False, 
+            showticklabels=False, 
+            zeroline=False,
+            range=[0, max_value],  # Ensure full range is visible
+            fixedrange=True
+        ),
+        yaxis=dict(
+            showgrid=False, 
+            showticklabels=False,
+            fixedrange=True
+        ),
         plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)'
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color=colors['text']),
+        hoverlabel=dict(
+            bgcolor=colors['bg'],
+            bordercolor=colors['border'],
+            font_color=colors['text']
+        )
     )
     
     return fig
@@ -220,7 +257,7 @@ def show_main_dashboard():
     
     # Progress bar
     fig = create_progress_bar(erreichte_ects, gesamt_ects, "ECTS")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     # Accessible progress information
     st.markdown(f"""
