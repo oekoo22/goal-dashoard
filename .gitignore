@@ -95,3 +95,10 @@ docs/_build/
 # Project Specific
 # Keep student_data.json as it's demo data
 # Keep eval-assets/ as they contain design references
+
+# Planning
+.claude
+CLAUDE.md
+specs.md
+initial.py
+eval-assets/
