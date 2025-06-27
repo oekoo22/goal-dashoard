@@ -1,0 +1,197 @@
+{
+  "name": "Informatik Bachelor",
+  "ects_gesamt": 180,
+  "semester": [
+    {
+      "nummer": 1,
+      "geplante_ects": 30,
+      "module": [
+        {
+          "name": "Grundlagen Programmierung",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.0,
+            "datum": "2023-02-15",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Mathematik I",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.3,
+            "datum": "2023-02-20",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Theoretische Informatik",
+          "ects": 6,
+          "pruefungsleistung": {
+            "note": 1.7,
+            "datum": "2023-02-25",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Betriebssysteme",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.0,
+            "datum": "2023-03-01",
+            "status": "bestanden"
+          }
+        }
+      ]
+    },
+    {
+      "nummer": 2,
+      "geplante_ects": 30,
+      "module": [
+        {
+          "name": "Datenstrukturen",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.3,
+            "datum": "2023-07-15",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Mathematik II",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.7,
+            "datum": "2023-07-20",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Softwareengineering",
+          "ects": 6,
+          "pruefungsleistung": {
+            "note": 1.7,
+            "datum": "2023-07-25",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Rechnernetze",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.0,
+            "datum": "2023-08-01",
+            "status": "bestanden"
+          }
+        }
+      ]
+    },
+    {
+      "nummer": 3,
+      "geplante_ects": 30,
+      "module": [
+        {
+          "name": "Datenbanken",
+          "ects": 8,
+          "pruefungsleistung": {
+            "note": 2.0,
+            "datum": "2024-02-15",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Web-Entwicklung",
+          "ects": 7,
+          "pruefungsleistung": {
+            "note": 1.7,
+            "datum": "2024-02-20",
+            "status": "bestanden"
+          }
+        },
+        {
+          "name": "Algorithmen",
+          "ects": 8,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Projektmanagement",
+          "ects": 7,
+          "pruefungsleistung": null
+        }
+      ]
+    },
+    {
+      "nummer": 4,
+      "geplante_ects": 30,
+      "module": [
+        {
+          "name": "Machine Learning",
+          "ects": 8,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "IT-Sicherheit",
+          "ects": 8,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Mobile Entwicklung",
+          "ects": 6,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Wahlpflichtmodul 1",
+          "ects": 8,
+          "pruefungsleistung": null
+        }
+      ]
+    },
+    {
+      "nummer": 5,
+      "geplante_ects": 30,
+      "module": [
+        {
+          "name": "Verteilte Systeme",
+          "ects": 8,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Wahlpflichtmodul 2",
+          "ects": 8,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Wahlpflichtmodul 3",
+          "ects": 8,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Seminar",
+          "ects": 6,
+          "pruefungsleistung": null
+        }
+      ]
+    },
+    {
+      "nummer": 6,
+      "geplante_ects": 30,
+      "module": [
+        {
+          "name": "Praktikum",
+          "ects": 12,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Bachelorarbeit",
+          "ects": 12,
+          "pruefungsleistung": null
+        },
+        {
+          "name": "Kolloquium",
+          "ects": 6,
+          "pruefungsleistung": null
+        }
+      ]
+    }
+  ]
+}
