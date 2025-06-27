@@ -15,15 +15,18 @@ COLORS = {
     'fourth': '#355C7D'
 }
 
-# Accessible colors for light/dark modes
+# Accessible colors for light/dark modes with improved contrast
 ACCESSIBLE_COLORS = {
     'light': {
         'bg': '#FFFFFF',
-        'text': '#000000',
-        'success': '#28A745',
-        'warning': '#FFC107',
-        'danger': '#DC3545',
-        'info': '#17A2B8'
+        'text': '#212529',          # Darker gray for better readability
+        'success': '#155724',       # Darker green for better contrast
+        'warning': '#856404',       # Dark gold instead of yellow
+        'danger': '#721c24',        # Darker red for better contrast
+        'info': '#0c5460',          # Dark teal for better contrast
+        'muted': '#6c757d',         # For secondary text
+        'border': '#dee2e6',        # Light borders
+        'shadow': 'rgba(0,0,0,0.15)' # Stronger shadow for light mode
     },
     'dark': {
         'bg': '#1E1E1E',
@@ -31,7 +34,10 @@ ACCESSIBLE_COLORS = {
         'success': '#4CAF50',
         'warning': '#FF9800',
         'danger': '#F44336',
-        'info': '#2196F3'
+        'info': '#2196F3',
+        'muted': '#adb5bd',         # For secondary text
+        'border': '#495057',        # Dark borders
+        'shadow': 'rgba(0,0,0,0.3)' # Stronger shadow for dark mode
     }
 }
 
@@ -256,47 +262,72 @@ def apply_theme():
     # Enhanced CSS for accessibility and visual improvements
     st.markdown(f"""
     <style>
-    /* Main app styling */
+    /* Main app styling with theme-aware colors */
     .stApp {{
-        background-color: {colors['bg']};
-        color: {colors['text']};
+        background-color: {colors['bg']} !important;
+        color: {colors['text']} !important;
+    }}
+    
+    /* Override Streamlit's default text colors */
+    .stMarkdown, .stText, p, div, span {{
+        color: {colors['text']} !important;
+    }}
+    
+    /* Ensure headings are visible */
+    h1, h2, h3, h4, h5, h6 {{
+        color: {colors['text']} !important;
+        font-weight: 700;
     }}
     
     /* Button styling with high contrast */
     .stButton > button {{
-        background-color: {COLORS['fourth']};
-        color: white;
-        border: 2px solid {COLORS['fourth']};
+        background-color: {COLORS['fourth']} !important;
+        color: white !important;
+        border: 2px solid {COLORS['fourth']} !important;
         border-radius: 8px;
         font-weight: 600;
         transition: all 0.3s ease;
     }}
     
     .stButton > button:hover {{
-        background-color: {COLORS['third']};
-        border-color: {COLORS['third']};
+        background-color: {COLORS['third']} !important;
+        border-color: {COLORS['third']} !important;
         transform: translateY(-1px);
     }}
     
     /* Focus indicators for keyboard navigation */
     .stButton > button:focus {{
-        outline: 3px solid {colors['info']};
+        outline: 3px solid {colors['info']} !important;
         outline-offset: 2px;
     }}
     
-    /* Metric cards with better contrast */
-    .metric-card {{
+    /* Metric styling with theme-aware colors */
+    .stMetric {{
         background-color: {colors['bg']};
-        border: 2px solid {COLORS['primary']};
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border: 1px solid {colors['border']};
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 2px 4px {colors['shadow']};
     }}
     
-    /* Progress bar accessibility */
+    .stMetric > div {{
+        color: {colors['text']} !important;
+    }}
+    
+    .stMetric label {{
+        color: {colors['muted']} !important;
+        font-size: 0.875rem;
+    }}
+    
+    .stMetric [data-testid="metric-value"] {{
+        color: {colors['text']} !important;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }}
+    
+    /* Progress bar with theme-aware styling */
     .progress-container {{
-        background-color: #E9ECEF;
+        background-color: {colors['border']};
         border-radius: 10px;
         height: 30px;
         margin: 10px 0;
@@ -312,45 +343,84 @@ def apply_theme():
     }}
     
     /* Alert styling with proper contrast */
-    .alert-warning {{
-        background-color: {colors['warning']};
-        color: #000;
-        border: 2px solid #FFA000;
+    .stAlert {{
         border-radius: 8px;
-        padding: 12px;
-        margin: 8px 0;
-        font-weight: 500;
+        border: 1px solid {colors['border']};
     }}
     
-    /* High contrast text for better readability */
-    h1, h2, h3, h4, h5, h6 {{
+    .stAlert[data-baseweb="notification"] {{
+        background-color: {colors['bg']};
         color: {colors['text']};
-        font-weight: 700;
+    }}
+    
+    /* Warning alerts */
+    .stWarning {{
+        background-color: {'#fff3cd' if theme == 'light' else '#664d03'} !important;
+        color: {colors['warning']} !important;
+        border-color: {colors['warning']} !important;
+    }}
+    
+    /* Success alerts */
+    .stSuccess {{
+        background-color: {'#d1edcc' if theme == 'light' else '#0f5132'} !important;
+        color: {colors['success']} !important;
+        border-color: {colors['success']} !important;
+    }}
+    
+    /* Info alerts */
+    .stInfo {{
+        background-color: {'#d1ecf1' if theme == 'light' else '#055160'} !important;
+        color: {colors['info']} !important;
+        border-color: {colors['info']} !important;
     }}
     
     /* Module status indicators with better visibility */
     .status-completed {{
-        color: {colors['success']};
+        color: {colors['success']} !important;
         font-size: 1.2em;
         font-weight: bold;
     }}
     
     .status-in-progress {{
-        color: {colors['warning']};
+        color: {colors['warning']} !important;
         font-size: 1.2em;
         font-weight: bold;
     }}
     
     .status-registered {{
-        color: {colors['info']};
+        color: {colors['info']} !important;
         font-size: 1.2em;
         font-weight: bold;
     }}
     
-    /* Improved divider visibility */
-    .divider {{
-        border-top: 2px solid {COLORS['primary']};
-        margin: 20px 0;
+    /* Divider styling */
+    .stDivider > div {{
+        border-color: {colors['border']} !important;
+    }}
+    
+    /* Sidebar styling if used */
+    .css-1d391kg {{
+        background-color: {colors['bg']};
+        color: {colors['text']};
+    }}
+    
+    /* DataFrame styling */
+    .stDataFrame {{
+        color: {colors['text']};
+    }}
+    
+    /* Plotly chart background */
+    .js-plotly-plot .plotly .modebar {{
+        background-color: {colors['bg']};
+    }}
+    
+    /* Ensure all text elements are visible */
+    .stTabs [data-baseweb="tab-list"] {{
+        background-color: {colors['bg']};
+    }}
+    
+    .stTabs [data-baseweb="tab"] {{
+        color: {colors['text']};
     }}
     
     /* Screen reader only text */
@@ -364,6 +434,11 @@ def apply_theme():
         clip: rect(0,0,0,0);
         white-space: nowrap;
         border: 0;
+    }}
+    
+    /* Ensure proper text contrast for all elements */
+    * {{
+        color: inherit;
     }}
     </style>
     """, unsafe_allow_html=True)
