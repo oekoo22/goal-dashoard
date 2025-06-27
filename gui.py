@@ -104,11 +104,12 @@ def show_semester_overview(studiengang: Studiengang):
             
             ects_erreicht = semester.berechne_ects()
             durchschnitt = semester.get_durchschnittsnote()
+            note_display = f"{durchschnitt:.1f}" if durchschnitt is not None else "N/A"
             
             st.markdown(f"""
             **{status_icon} Semester {semester.nummer}**  
             ECTS: {ects_erreicht}/{semester.geplante_ects}  
-            Ø Note: {durchschnitt:.1f if durchschnitt else 'N/A'}
+            Ø Note: {note_display}
             """)
 
 
