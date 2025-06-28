@@ -414,25 +414,28 @@ def show_current_modules(studiengang: Studiengang):
             cols = st.columns([3, 1, 1, 1])
             
             with cols[0]:
-                st.write(f"• {modul.name}")
+                st.markdown(f'<div class="module-name">• {modul.name}</div>', unsafe_allow_html=True)
             
             with cols[1]:
-                st.write(f"[{modul.ects} ECTS]")
+                st.markdown(f'<div class="module-ects">[{modul.ects} ECTS]</div>', unsafe_allow_html=True)
             
             with cols[2]:
                 if modul.ist_bestanden():
-                    st.write("✅")
+                    st.markdown('<div class="module-status status-completed">✅ bestanden</div>', unsafe_allow_html=True)
                 elif modul.pruefungsleistung is None:
-                    st.write("⏳ laufend" if "Algorithmen" in modul.name else "📝 angemeldet")
+                    if "Algorithmen" in modul.name:
+                        st.markdown('<div class="module-status status-in-progress">⏳ laufend</div>', unsafe_allow_html=True)
+                    else:
+                        st.markdown('<div class="module-status status-registered">📝 angemeldet</div>', unsafe_allow_html=True)
                 else:
-                    st.write("❌")
+                    st.markdown('<div class="module-status status-failed">❌ nicht bestanden</div>', unsafe_allow_html=True)
             
             with cols[3]:
                 note = modul.get_note()
                 if note:
-                    st.write(f"{note:.1f}")
+                    st.markdown(f'<div class="module-grade">{note:.1f}</div>', unsafe_allow_html=True)
                 else:
-                    st.write("-")
+                    st.markdown('<div class="module-grade">-</div>', unsafe_allow_html=True)
         
         # Add module form
         show_add_module_form(studiengang)
@@ -565,8 +568,8 @@ def apply_theme():
         color: {colors['text']} !important;
     }}
     
-    /* Override Streamlit's default text colors */
-    .stMarkdown, .stText, p, div, span {{
+    /* Override Streamlit's default text colors - more specific */
+    .stMarkdown p, .stText p, .element-container p {{
         color: {colors['text']} !important;
     }}
     
@@ -574,6 +577,41 @@ def apply_theme():
     h1, h2, h3, h4, h5, h6 {{
         color: {colors['text']} !important;
         font-weight: 700;
+    }}
+    
+    /* Module display styling with proper contrast */
+    .module-name {{
+        color: {colors['text']} !important;
+        font-weight: 500;
+        font-size: 1rem;
+        line-height: 1.4;
+    }}
+    
+    .module-ects {{
+        color: {colors['muted']} !important;
+        font-size: 0.9rem;
+        font-weight: 600;
+        background-color: {'#f8f9fa' if theme == 'light' else '#495057'};
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+    }}
+    
+    .module-grade {{
+        color: {colors['text']} !important;
+        font-weight: 600;
+        font-size: 1rem;
+        text-align: center;
+    }}
+    
+    .module-status {{
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-align: center;
+        display: inline-block;
+        min-width: 80px;
     }}
     
     /* Button styling with high contrast */
@@ -671,23 +709,29 @@ def apply_theme():
         border-color: {colors['info']} !important;
     }}
     
-    /* Module status indicators with better visibility */
+    /* Module status indicators with better visibility and backgrounds */
     .status-completed {{
-        color: {colors['success']} !important;
-        font-size: 1.2em;
-        font-weight: bold;
+        color: {'#0f5132' if theme == 'light' else colors['success']} !important;
+        background-color: {'#d1edcc' if theme == 'light' else '#1e4620'} !important;
+        border: 1px solid {'#a3d977' if theme == 'light' else colors['success']};
     }}
     
     .status-in-progress {{
-        color: {colors['warning']} !important;
-        font-size: 1.2em;
-        font-weight: bold;
+        color: {'#664d03' if theme == 'light' else colors['warning']} !important;
+        background-color: {'#fff3cd' if theme == 'light' else '#332701'} !important;
+        border: 1px solid {'#ffec8b' if theme == 'light' else colors['warning']};
     }}
     
     .status-registered {{
-        color: {colors['info']} !important;
-        font-size: 1.2em;
-        font-weight: bold;
+        color: {'#055160' if theme == 'light' else colors['info']} !important;
+        background-color: {'#cff4fc' if theme == 'light' else '#032830'} !important;
+        border: 1px solid {'#9eeaf9' if theme == 'light' else colors['info']};
+    }}
+    
+    .status-failed {{
+        color: {'#58151c' if theme == 'light' else colors['danger']} !important;
+        background-color: {'#f8d7da' if theme == 'light' else '#2c0b0e'} !important;
+        border: 1px solid {'#f1aeb5' if theme == 'light' else colors['danger']};
     }}
     
     /* Divider styling */
@@ -733,9 +777,75 @@ def apply_theme():
         border: 0;
     }}
     
-    /* Ensure proper text contrast for all elements */
-    * {{
-        color: inherit;
+    /* Form styling improvements for better contrast */
+    .stTextInput > div > div > input {{
+        color: {colors['text']} !important;
+        background-color: {colors['bg']} !important;
+        border: 2px solid {colors['border']} !important;
+    }}
+    
+    .stTextInput > div > div > input:focus {{
+        border-color: {colors['info']} !important;
+        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.1)' if theme == 'light' else 'rgba(33, 150, 243, 0.1)'} !important;
+    }}
+    
+    .stNumberInput > div > div > input {{
+        color: {colors['text']} !important;
+        background-color: {colors['bg']} !important;
+        border: 2px solid {colors['border']} !important;
+    }}
+    
+    .stNumberInput > div > div > input:focus {{
+        border-color: {colors['info']} !important;
+        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.1)' if theme == 'light' else 'rgba(33, 150, 243, 0.1)'} !important;
+    }}
+    
+    .stSelectbox > div > div > div {{
+        color: {colors['text']} !important;
+        background-color: {colors['bg']} !important;
+        border: 2px solid {colors['border']} !important;
+    }}
+    
+    .stDateInput > div > div > input {{
+        color: {colors['text']} !important;
+        background-color: {colors['bg']} !important;
+        border: 2px solid {colors['border']} !important;
+    }}
+    
+    .stCheckbox > label {{
+        color: {colors['text']} !important;
+    }}
+    
+    .stCheckbox > label > div {{
+        color: {colors['text']} !important;
+    }}
+    
+    /* Form labels */
+    .stTextInput > label, .stNumberInput > label, .stSelectbox > label, .stDateInput > label {{
+        color: {colors['text']} !important;
+        font-weight: 600;
+    }}
+    
+    /* Expander styling */
+    .stExpander > div > div > div > div > p {{
+        color: {colors['text']} !important;
+    }}
+    
+    .stExpander > div > div > div:first-child {{
+        background-color: {colors['bg']} !important;
+        border: 1px solid {colors['border']} !important;
+    }}
+    
+    /* Info/warning/error message improvements */
+    .stAlert {{
+        border-radius: 8px;
+        border-width: 2px;
+        font-weight: 500;
+    }}
+    
+    /* Ensure proper text contrast for inherited elements */
+    .element-container {{
+        color: {colors['text']};
     }}
     </style>
     """, unsafe_allow_html=True)

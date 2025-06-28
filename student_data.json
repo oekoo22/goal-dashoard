@@ -111,7 +111,11 @@
         {
           "name": "Algorithmen",
           "ects": 8,
-          "pruefungsleistung": null
+          "pruefungsleistung": {
+            "note": 2.0,
+            "datum": "2025-06-28",
+            "status": "nicht bestanden"
+          }
         },
         {
           "name": "Projektmanagement",
@@ -126,6 +130,11 @@
             "datum": "2025-06-30",
             "status": "bestanden"
           }
+        },
+        {
+          "name": "Python OOP",
+          "ects": 5,
+          "pruefungsleistung": null
         }
       ]
     },
