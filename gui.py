@@ -1,10 +1,11 @@
 import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
-from models import Studiengang
+from models import Studiengang, Modul, Pruefungsleistung
 from data import create_sample_data
 import json
 import os
+from datetime import date
 
 
 # Color scheme from CLAUDE.md
@@ -40,6 +41,251 @@ ACCESSIBLE_COLORS = {
         'shadow': 'rgba(0,0,0,0.3)' # Stronger shadow for dark mode
     }
 }
+
+
+def validate_module_input(name: str, ects: int) -> tuple[bool, str]:
+    """Validate module input and return (is_valid, error_message)."""
+    if not name or not name.strip():
+        return False, "Module name cannot be empty."
+    
+    if len(name.strip()) < 2:
+        return False, "Module name must be at least 2 characters long."
+    
+    if len(name.strip()) > 100:
+        return False, "Module name must be less than 100 characters."
+    
+    if ects < 1 or ects > 30:
+        return False, "ECTS must be between 1 and 30."
+    
+    return True, ""
+
+
+def validate_grade_input(grade: float) -> tuple[bool, str]:
+    """Validate grade input and return (is_valid, error_message)."""
+    if grade < 1.0 or grade > 5.0:
+        return False, "Grade must be between 1.0 and 5.0."
+    
+    # Check if grade is in reasonable increments (0.1 steps)
+    if round(grade * 10) != grade * 10:
+        return False, "Grade must be in 0.1 increments (e.g., 1.0, 1.3, 2.7)."
+    
+    return True, ""
+
+
+def check_duplicate_module(studiengang: Studiengang, module_name: str, exclude_module=None) -> bool:
+    """Check if a module with the same name already exists in current semester."""
+    aktuelles_semester = studiengang.get_aktuelles_semester()
+    if not aktuelles_semester:
+        return False
+    
+    for modul in aktuelles_semester.module:
+        if modul != exclude_module and modul.name.lower().strip() == module_name.lower().strip():
+            return True
+    return False
+
+
+def save_data():
+    """Save current study data to JSON file."""
+    try:
+        st.session_state.studiengang.save_to_file('student_data.json')
+        return True
+    except Exception as e:
+        st.error(f"Error saving data: {e}")
+        return False
+
+
+def show_add_module_form(studiengang: Studiengang):
+    """Display form for adding new modules to current semester."""
+    aktuelles_semester = studiengang.get_aktuelles_semester()
+    
+    if not aktuelles_semester:
+        st.warning("⚠️ No current semester available to add modules to.")
+        return
+    
+    with st.expander("➕ Add New Module", expanded=False):
+        st.markdown(f"**Adding to Semester {aktuelles_semester.nummer}**")
+        
+        with st.form("add_module_form"):
+            # Module details
+            module_name = st.text_input("Module Name", placeholder="e.g., Web Development")
+            ects = st.number_input("ECTS Credits", min_value=1, max_value=30, value=6, step=1)
+            
+            # Optional grade information
+            st.markdown("**Optional: Add Grade Information**")
+            has_grade = st.checkbox("This module is already completed with a grade")
+            
+            grade = None
+            exam_date = None
+            if has_grade:
+                grade = st.number_input("Grade", min_value=1.0, max_value=5.0, value=2.0, step=0.1, 
+                                      help="German grading system: 1.0 (best) to 5.0 (worst)")
+                exam_date = st.date_input("Exam Date", value=date.today())
+            
+            # Submit button
+            submitted = st.form_submit_button("Add Module", type="primary")
+            
+            if submitted:
+                # Validate module input
+                is_valid, error_msg = validate_module_input(module_name, ects)
+                if not is_valid:
+                    st.error(f"❌ {error_msg}")
+                    return
+                
+                # Check for duplicates
+                if check_duplicate_module(studiengang, module_name):
+                    st.error(f"❌ A module named '{module_name}' already exists in this semester.")
+                    return
+                
+                # Validate grade if provided
+                if has_grade and grade is not None:
+                    grade_valid, grade_error = validate_grade_input(grade)
+                    if not grade_valid:
+                        st.error(f"❌ {grade_error}")
+                        return
+                
+                # Create new module
+                try:
+                    if has_grade and grade is not None:
+                        pruefungsleistung = Pruefungsleistung(grade, exam_date, "bestanden")
+                        new_module = Modul(module_name.strip(), ects, pruefungsleistung)
+                    else:
+                        new_module = Modul(module_name.strip(), ects)
+                    
+                    # Add to current semester
+                    aktuelles_semester.add_modul(new_module)
+                    
+                    # Save data
+                    if save_data():
+                        st.success(f"✅ Module '{module_name}' added successfully!")
+                        st.rerun()
+                    else:
+                        st.error("❌ Failed to save data.")
+                        
+                except Exception as e:
+                    st.error(f"❌ Error creating module: {e}")
+
+
+def show_grade_recording_form(studiengang: Studiengang):
+    """Display form for adding grades to existing modules."""
+    aktuelles_semester = studiengang.get_aktuelles_semester()
+    
+    if not aktuelles_semester:
+        return
+    
+    # Find modules without grades
+    modules_without_grades = [m for m in aktuelles_semester.module if m.pruefungsleistung is None]
+    
+    if not modules_without_grades:
+        return
+    
+    with st.expander("📝 Record Grades", expanded=False):
+        st.markdown("**Add grades to completed modules**")
+        
+        for i, modul in enumerate(modules_without_grades):
+            with st.form(f"grade_form_{i}"):
+                st.markdown(f"**{modul.name}** ({modul.ects} ECTS)")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    grade = st.number_input(f"Grade", min_value=1.0, max_value=5.0, value=2.0, step=0.1,
+                                          key=f"grade_{i}", help="German grading system: 1.0 (best) to 5.0 (worst)")
+                with col2:
+                    exam_date = st.date_input(f"Exam Date", value=date.today(), key=f"date_{i}")
+                
+                status = st.selectbox("Status", ["bestanden", "nicht bestanden"], key=f"status_{i}")
+                
+                submitted = st.form_submit_button(f"Record Grade for {modul.name}", type="primary")
+                
+                if submitted:
+                    # Validate grade input
+                    grade_valid, grade_error = validate_grade_input(grade)
+                    if not grade_valid:
+                        st.error(f"❌ {grade_error}")
+                        continue
+                    
+                    try:
+                        # Create and assign the grade
+                        pruefungsleistung = Pruefungsleistung(grade, exam_date, status)
+                        modul.pruefungsleistung = pruefungsleistung
+                        
+                        # Save data
+                        if save_data():
+                            st.success(f"✅ Grade recorded for '{modul.name}'!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to save data.")
+                    except Exception as e:
+                        st.error(f"❌ Error recording grade: {e}")
+                
+                st.divider()
+
+
+def show_edit_module_form(studiengang: Studiengang):
+    """Display form for editing existing module details."""
+    aktuelles_semester = studiengang.get_aktuelles_semester()
+    
+    if not aktuelles_semester or not aktuelles_semester.module:
+        return
+    
+    with st.expander("✏️ Edit Modules", expanded=False):
+        st.markdown("**Edit module details**")
+        
+        for i, modul in enumerate(aktuelles_semester.module):
+            with st.form(f"edit_form_{i}"):
+                st.markdown(f"**Currently: {modul.name}** ({modul.ects} ECTS)")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    new_name = st.text_input("Module Name", value=modul.name, key=f"edit_name_{i}")
+                with col2:
+                    new_ects = st.number_input("ECTS Credits", min_value=1, max_value=30, 
+                                             value=modul.ects, step=1, key=f"edit_ects_{i}")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    update_submitted = st.form_submit_button(f"Update {modul.name}", type="primary")
+                with col2:
+                    if st.form_submit_button(f"🗑️ Delete {modul.name}", type="secondary"):
+                        if st.session_state.get(f"confirm_delete_{i}", False):
+                            # Remove the module
+                            aktuelles_semester.module.remove(modul)
+                            if save_data():
+                                st.success(f"✅ Module '{modul.name}' deleted!")
+                                st.rerun()
+                            else:
+                                st.error("❌ Failed to save data.")
+                        else:
+                            st.session_state[f"confirm_delete_{i}"] = True
+                            st.warning(f"⚠️ Click again to confirm deletion of '{modul.name}'")
+                
+                if update_submitted:
+                    # Validate module input
+                    is_valid, error_msg = validate_module_input(new_name, new_ects)
+                    if not is_valid:
+                        st.error(f"❌ {error_msg}")
+                        continue
+                    
+                    # Check for duplicates (excluding current module)
+                    if check_duplicate_module(studiengang, new_name, exclude_module=modul):
+                        st.error(f"❌ A module named '{new_name}' already exists in this semester.")
+                        continue
+                    
+                    try:
+                        # Update module details
+                        old_name = modul.name
+                        modul.name = new_name.strip()
+                        modul.ects = new_ects
+                        
+                        # Save data
+                        if save_data():
+                            st.success(f"✅ Module updated from '{old_name}' to '{modul.name}'!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to save data.")
+                    except Exception as e:
+                        st.error(f"❌ Error updating module: {e}")
+                
+                st.divider()
 
 
 def init_session_state():
@@ -163,6 +409,7 @@ def show_current_modules(studiengang: Studiengang):
     if aktuelles_semester:
         st.subheader(f"📝 Aktuelle Module (Semester {aktuelles_semester.nummer})")
         
+        # Display existing modules
         for modul in aktuelles_semester.module:
             cols = st.columns([3, 1, 1, 1])
             
@@ -186,6 +433,17 @@ def show_current_modules(studiengang: Studiengang):
                     st.write(f"{note:.1f}")
                 else:
                     st.write("-")
+        
+        # Add module form
+        show_add_module_form(studiengang)
+        
+        # Grade recording form
+        show_grade_recording_form(studiengang)
+        
+        # Edit modules form
+        show_edit_module_form(studiengang)
+    else:
+        st.info("📚 No current semester found. All semesters may be completed.")
 
 
 def show_grade_analysis(studiengang: Studiengang):
@@ -274,16 +532,18 @@ def show_main_dashboard():
     
     st.divider()
     
-    # Two column layout for main content
-    col1, col2 = st.columns(2)
+    # Grade analysis section
+    show_grade_analysis(studiengang)
     
-    with col1:
-        show_grade_analysis(studiengang)
-        st.divider()
-        show_semester_overview(studiengang)
+    st.divider()
     
-    with col2:
-        show_current_modules(studiengang)
+    # Current modules section - give it more space
+    show_current_modules(studiengang)
+    
+    st.divider()
+    
+    # Semester overview section
+    show_semester_overview(studiengang)
     
     st.divider()
     

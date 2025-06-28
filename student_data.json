@@ -117,6 +117,15 @@
           "name": "Projektmanagement",
           "ects": 7,
           "pruefungsleistung": null
+        },
+        {
+          "name": "CI/CD",
+          "ects": 5,
+          "pruefungsleistung": {
+            "note": 2.0,
+            "datum": "2025-06-30",
+            "status": "bestanden"
+          }
         }
       ]
     },
