@@ -606,58 +606,7 @@ def show_semester_overview(studiengang: Studiengang):
                 st.rerun()
 
 
-def show_current_modules(studiengang: Studiengang):
-    """Display current semester modules."""
-    aktuelles_semester = studiengang.get_aktuelles_semester()
-    
-    if aktuelles_semester:
-        st.subheader(f"📝 Aktuelle Module (Semester {aktuelles_semester.nummer})")
-        
-        # Display existing modules
-        # Find the first module without grade (considered in progress)
-        modules_without_grade = [m for m in aktuelles_semester.module if m.pruefungsleistung is None]
-        first_in_progress = modules_without_grade[0] if modules_without_grade else None
-        
-        for modul in aktuelles_semester.module:
-            cols = st.columns([3, 1, 1, 1])
-            
-            with cols[0]:
-                st.markdown(f'<div class="module-name">• {modul.name}</div>', unsafe_allow_html=True)
-            
-            with cols[1]:
-                st.markdown(f'<div class="module-ects">[{modul.ects} ECTS]</div>', unsafe_allow_html=True)
-            
-            with cols[2]:
-                if modul.ist_bestanden():
-                    st.markdown('<div class="module-status status-completed">✅ bestanden</div>', unsafe_allow_html=True)
-                elif modul.pruefungsleistung is None:
-                    if modul == first_in_progress:
-                        st.markdown('<div class="module-status status-in-progress">⏳ laufend</div>', unsafe_allow_html=True)
-                    else:
-                        st.markdown('<div class="module-status status-registered">📝 angemeldet</div>', unsafe_allow_html=True)
-                else:
-                    st.markdown('<div class="module-status status-failed">❌ nicht bestanden</div>', unsafe_allow_html=True)
-            
-            with cols[3]:
-                note = modul.get_note()
-                if note:
-                    st.markdown(f'<div class="module-grade">{note:.1f}</div>', unsafe_allow_html=True)
-                else:
-                    st.markdown('<div class="module-grade">-</div>', unsafe_allow_html=True)
-        
-        # Add module form
-        show_add_module_form(studiengang)
-        
-        # Grade recording form
-        show_grade_recording_form(studiengang)
-        
-        # Edit modules form
-        show_edit_module_form(studiengang)
-    else:
-        st.info("📚 No current semester found. All semesters may be completed.")
-
-
-def show_selected_semester_modules(studiengang: Studiengang):
+def show_semester_modules(studiengang: Studiengang):
     """Display and edit modules for the selected semester."""
     selected_semester_num = st.session_state.selected_semester
     selected_semester = None
@@ -672,7 +621,7 @@ def show_selected_semester_modules(studiengang: Studiengang):
         st.error("❌ Ausgewähltes Semester nicht gefunden.")
         return
     
-    st.subheader(f"✏️ Semester {selected_semester.nummer} - Module bearbeiten")
+    st.subheader(f"📝 Semester {selected_semester.nummer}")
     
     # Display semester info
     ects_erreicht = selected_semester.berechne_ects()
@@ -737,6 +686,7 @@ def show_selected_semester_modules(studiengang: Studiengang):
     
     # Module editing form for selected semester
     show_edit_module_form_for_semester(studiengang, selected_semester)
+
 
 
 def show_grade_analysis(studiengang: Studiengang):
@@ -830,18 +780,13 @@ def show_main_dashboard():
     
     st.divider()
     
-    # Current modules section - give it more space
-    show_current_modules(studiengang)
-    
-    st.divider()
-    
     # Semester overview section
     show_semester_overview(studiengang)
     
     st.divider()
     
-    # Selected semester editing section
-    show_selected_semester_modules(studiengang)
+    # Selected semester modules section
+    show_semester_modules(studiengang)
     
     st.divider()
     
