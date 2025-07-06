@@ -4,7 +4,10 @@
       "Bash(python:*)",
       "Bash(pip install:*)",
       "Bash(pip3 install:*)",
-      "Bash(source:*)"
+      "Bash(source:*)",
+      "Bash(lsof:*)",
+      "Bash(streamlit run:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }
