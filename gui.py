@@ -1075,26 +1075,37 @@ def apply_theme():
     /* Form styling improvements for better contrast */
     .stTextInput > div > div > input {{
         color: {colors['text']} !important;
-        background-color: {colors['bg']} !important;
-        border: 2px solid {'#ced4da' if theme == 'light' else colors['border']} !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
+        border: 2px solid {'#adb5bd' if theme == 'light' else colors['border']} !important;
         border-radius: 6px !important;
         font-size: 1rem !important;
-        padding: 8px 12px !important;
+        padding: 10px 14px !important;
+        transition: all 0.2s ease !important;
+    }}
+    
+    .stTextInput > div > div > input:hover {{
+        border-color: {'#6c757d' if theme == 'light' else '#6c757d'} !important;
     }}
     
     .stTextInput > div > div > input:focus {{
         border-color: {colors['info']} !important;
-        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.15)' if theme == 'light' else 'rgba(33, 150, 243, 0.15)'} !important;
+        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.2)' if theme == 'light' else 'rgba(33, 150, 243, 0.2)'} !important;
         outline: none !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
     }}
     
     .stNumberInput > div > div > input {{
         color: {colors['text']} !important;
-        background-color: {colors['bg']} !important;
-        border: 2px solid {'#ced4da' if theme == 'light' else colors['border']} !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
+        border: 2px solid {'#adb5bd' if theme == 'light' else colors['border']} !important;
         border-radius: 6px !important;
         font-size: 1rem !important;
-        padding: 8px 12px !important;
+        padding: 10px 14px !important;
+        transition: all 0.2s ease !important;
+    }}
+    
+    .stNumberInput > div > div > input:hover {{
+        border-color: {'#6c757d' if theme == 'light' else '#6c757d'} !important;
     }}
     
     .stNumberInput > div > div > input:focus {{
@@ -1105,38 +1116,112 @@ def apply_theme():
     
     .stSelectbox > div > div > div {{
         color: {colors['text']} !important;
-        background-color: {colors['bg']} !important;
-        border: 2px solid {'#ced4da' if theme == 'light' else colors['border']} !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
+        border: 2px solid {'#adb5bd' if theme == 'light' else colors['border']} !important;
         border-radius: 6px !important;
+        padding: 10px 14px !important;
+        transition: all 0.2s ease !important;
+    }}
+    
+    .stSelectbox > div > div > div:hover {{
+        border-color: {'#6c757d' if theme == 'light' else '#6c757d'} !important;
     }}
     
     .stSelectbox > div > div > div:focus {{
         border-color: {colors['info']} !important;
-        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.15)' if theme == 'light' else 'rgba(33, 150, 243, 0.15)'} !important;
+        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.2)' if theme == 'light' else 'rgba(33, 150, 243, 0.2)'} !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
     }}
     
     .stDateInput > div > div > input {{
         color: {colors['text']} !important;
-        background-color: {colors['bg']} !important;
-        border: 2px solid {'#ced4da' if theme == 'light' else colors['border']} !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
+        border: 2px solid {'#adb5bd' if theme == 'light' else colors['border']} !important;
         border-radius: 6px !important;
         font-size: 1rem !important;
-        padding: 8px 12px !important;
+        padding: 10px 14px !important;
+        transition: all 0.2s ease !important;
+    }}
+    
+    .stDateInput > div > div > input:hover {{
+        border-color: {'#6c757d' if theme == 'light' else '#6c757d'} !important;
     }}
     
     .stDateInput > div > div > input:focus {{
         border-color: {colors['info']} !important;
-        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.15)' if theme == 'light' else 'rgba(33, 150, 243, 0.15)'} !important;
+        box-shadow: 0 0 0 3px {'rgba(12, 84, 96, 0.2)' if theme == 'light' else 'rgba(33, 150, 243, 0.2)'} !important;
         outline: none !important;
+        background-color: {'#ffffff' if theme == 'light' else colors['bg']} !important;
     }}
     
     .stCheckbox > label {{
         color: {colors['text']} !important;
         font-weight: 500 !important;
+        cursor: pointer !important;
+        transition: color 0.2s ease !important;
+        padding: 4px 0 !important;
+    }}
+    
+    .stCheckbox > label:hover {{
+        color: {colors['info']} !important;
     }}
     
     .stCheckbox > label > div {{
         color: {colors['text']} !important;
+    }}
+    
+    .stCheckbox input[type="checkbox"] {{
+        accent-color: {colors['info']} !important;
+        transform: scale(1.1) !important;
+    }}
+    
+    /* Enhanced button hover effects */
+    .stButton > button {{
+        transition: all 0.2s ease !important;
+        cursor: pointer !important;
+    }}
+    
+    .stButton > button:active {{
+        transform: translateY(1px) !important;
+        box-shadow: 0 2px 4px {colors['shadow']} !important;
+    }}
+    
+    /* Loading state improvements */
+    .stSpinner {{
+        color: {colors['info']} !important;
+    }}
+    
+    /* Enhanced visual feedback */
+    .stSuccess {{
+        background-color: {'#d1edcc' if theme == 'light' else '#0f5132'} !important;
+        border: 2px solid {colors['success']} !important;
+        border-radius: 8px !important;
+        padding: 12px 16px !important;
+        font-weight: 500 !important;
+    }}
+    
+    .stError {{
+        background-color: {'#f8d7da' if theme == 'light' else '#2c0b0e'} !important;
+        border: 2px solid {colors['danger']} !important;
+        border-radius: 8px !important;
+        padding: 12px 16px !important;
+        font-weight: 500 !important;
+    }}
+    
+    .stWarning {{
+        background-color: {'#fff3cd' if theme == 'light' else '#664d03'} !important;
+        border: 2px solid {colors['warning']} !important;
+        border-radius: 8px !important;
+        padding: 12px 16px !important;
+        font-weight: 500 !important;
+    }}
+    
+    .stInfo {{
+        background-color: {'#d1ecf1' if theme == 'light' else '#055160'} !important;
+        border: 2px solid {colors['info']} !important;
+        border-radius: 8px !important;
+        padding: 12px 16px !important;
+        font-weight: 500 !important;
     }}
     
     /* Form labels with stronger visibility */
@@ -1186,14 +1271,97 @@ def apply_theme():
         transform: translateY(-1px) !important;
     }}
     
-    /* Expander styling */
-    .stExpander > div > div > div > div > p {{
-        color: {colors['text']} !important;
+    /* Enhanced Expander styling for better light mode visibility */
+    .stExpander {{
+        border: 2px solid {colors['border']} !important;
+        border-radius: 8px !important;
+        background-color: {colors['bg']} !important;
+        box-shadow: 0 2px 4px {colors['shadow']} !important;
+        margin: 8px 0 !important;
     }}
     
     .stExpander > div > div > div:first-child {{
+        background-color: {'#f8f9fa' if theme == 'light' else '#2d2d2d'} !important;
+        border: none !important;
+        border-bottom: 2px solid {colors['border']} !important;
+        border-radius: 6px 6px 0 0 !important;
+        padding: 12px 16px !important;
+        font-weight: 600 !important;
+        color: {colors['text']} !important;
+    }}
+    
+    .stExpander > div > div > div:first-child:hover {{
+        background-color: {'#e9ecef' if theme == 'light' else '#3a3a3a'} !important;
+        transition: background-color 0.2s ease !important;
+    }}
+    
+    .stExpander > div > div > div > div > p {{
+        color: {colors['text']} !important;
+        margin: 0 !important;
+        font-weight: 600 !important;
+    }}
+    
+    .stExpander[data-testid="stExpander"] > div:last-child {{
         background-color: {colors['bg']} !important;
+        border-radius: 0 0 6px 6px !important;
+        padding: 16px !important;
+    }}
+    
+    /* Expander content area */
+    .stExpander[data-testid="stExpander"][aria-expanded="true"] {{
+        border-color: {colors['info']} !important;
+    }}
+    
+    /* Form container styling for better visual separation */
+    .stForm {{
+        background-color: {'#ffffff' if theme == 'light' else '#1e1e1e'} !important;
         border: 1px solid {colors['border']} !important;
+        border-radius: 8px !important;
+        padding: 20px !important;
+        margin: 12px 0 !important;
+        box-shadow: 0 2px 8px {colors['shadow']} !important;
+    }}
+    
+    .stForm > div {{
+        background-color: transparent !important;
+    }}
+    
+    /* Form section headers */
+    .stForm .stMarkdown h4, 
+    .stForm .stMarkdown h5,
+    .stForm .stMarkdown strong {{
+        color: {colors['text']} !important;
+        font-weight: 600 !important;
+        margin-bottom: 8px !important;
+    }}
+    
+    /* Form dividers */
+    .stForm .stDivider {{
+        margin: 16px 0 !important;
+    }}
+    
+    .stForm .stDivider > div {{
+        border-color: {colors['border']} !important;
+        opacity: 0.6 !important;
+    }}
+    
+    /* Enhanced form field grouping */
+    .stForm .stColumns {{
+        margin: 8px 0 !important;
+    }}
+    
+    /* Form field labels enhancement */
+    .stForm label {{
+        color: {colors['text']} !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 6px !important;
+        display: block !important;
+    }}
+    
+    /* Submit button area */
+    .stForm .stButton {{
+        margin-top: 16px !important;
     }}
     
     /* Info/warning/error message improvements */
