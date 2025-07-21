@@ -76,7 +76,7 @@ This tests all components without requiring GUI dependencies.
 
 The application includes realistic sample data representing:
 - 6-semester Computer Science Bachelor program (180 ECTS)
-- Completed semesters 1-2 with various grades
+- Semesters 1-2 with various grades
 - Current semester 3 with ongoing modules
 - Planned future semesters
 
@@ -126,11 +126,11 @@ Modify `data.py` to create different sample data or integrate with real data sou
 - **Frontend**: Streamlit with Plotly for visualizations
 - **Data Storage**: JSON files for persistence
 - **Testing**: Comprehensive unit tests for all components
-- **Architecture**: Clean separation of concerns with OOP principles
+- **Architecture**: Clean separation with OOP principles
 
 ## 📱 Browser Compatibility
 
-- Modern browsers (Chrome, Firefox, Safari, Edge)
+- Browsers (Chrome, Firefox, Safari, Edge)
 - Mobile-responsive design
 - Works with screen readers and assistive technologies
 
@@ -144,4 +144,4 @@ This is a demo project showcasing OOP principles in Python. Feel free to:
 
 ## 📄 License
 
-This project is for educational purposes demonstrating Object-Oriented Programming in Python.
+This project is for educational purposes demonstrating Object-Oriented Programming in Python following  the module tasks in "Objektorientierte und funktionale Programmierung mit Python (DLBDSOOFPP01_D)" of IU International University.
