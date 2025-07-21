@@ -11,53 +11,53 @@ def create_sample_data() -> Studiengang:
     
     # Semester 1 (completed)
     semester1 = Semester(1, 30)
-    semester1.add_modul(Modul("Grundlagen Programmierung", 8, 
+    semester1.add_modul(Modul("Grundlagen Programmierung", 5, 
                              Pruefungsleistung(2.0, date(2023, 2, 15))))
-    semester1.add_modul(Modul("Mathematik I", 8, 
+    semester1.add_modul(Modul("Mathematik I", 5, 
                              Pruefungsleistung(2.3, date(2023, 2, 20))))
-    semester1.add_modul(Modul("Theoretische Informatik", 6, 
+    semester1.add_modul(Modul("Theoretische Informatik", 5, 
                              Pruefungsleistung(1.7, date(2023, 2, 25))))
-    semester1.add_modul(Modul("Betriebssysteme", 8, 
+    semester1.add_modul(Modul("Betriebssysteme", 5, 
                              Pruefungsleistung(2.0, date(2023, 3, 1))))
     
     # Semester 2 (completed)
     semester2 = Semester(2, 30)
-    semester2.add_modul(Modul("Datenstrukturen", 8, 
+    semester2.add_modul(Modul("Datenstrukturen", 5, 
                              Pruefungsleistung(2.3, date(2023, 7, 15))))
-    semester2.add_modul(Modul("Mathematik II", 8, 
+    semester2.add_modul(Modul("Mathematik II", 5, 
                              Pruefungsleistung(2.7, date(2023, 7, 20))))
-    semester2.add_modul(Modul("Softwareengineering", 6, 
+    semester2.add_modul(Modul("Softwareengineering", 5, 
                              Pruefungsleistung(1.7, date(2023, 7, 25))))
-    semester2.add_modul(Modul("Rechnernetze", 8, 
+    semester2.add_modul(Modul("Rechnernetze", 5, 
                              Pruefungsleistung(2.0, date(2023, 8, 1))))
     
     # Semester 3 (current - partially completed)
     semester3 = Semester(3, 30)
-    semester3.add_modul(Modul("Datenbanken", 8, 
+    semester3.add_modul(Modul("Datenbanken", 5, 
                              Pruefungsleistung(2.0, date(2024, 2, 15))))
-    semester3.add_modul(Modul("Web-Entwicklung", 7, 
+    semester3.add_modul(Modul("Web-Entwicklung", 5, 
                              Pruefungsleistung(1.7, date(2024, 2, 20))))
     # Current modules without grades yet
-    semester3.add_modul(Modul("Algorithmen", 8))  # In progress
-    semester3.add_modul(Modul("Projektmanagement", 7))  # Registered
+    semester3.add_modul(Modul("Algorithmen", 5))  # In progress
+    semester3.add_modul(Modul("Projektmanagement", 5))  # Registered
     
     # Future semesters (planned)
     semester4 = Semester(4, 30)
-    semester4.add_modul(Modul("Machine Learning", 8))
-    semester4.add_modul(Modul("IT-Sicherheit", 8))
-    semester4.add_modul(Modul("Mobile Entwicklung", 6))
-    semester4.add_modul(Modul("Wahlpflichtmodul 1", 8))
+    semester4.add_modul(Modul("Machine Learning", 5))
+    semester4.add_modul(Modul("IT-Sicherheit", 5))
+    semester4.add_modul(Modul("Mobile Entwicklung", 5))
+    semester4.add_modul(Modul("Wahlpflichtmodul 1", 5))
     
     semester5 = Semester(5, 30)
-    semester5.add_modul(Modul("Verteilte Systeme", 8))
-    semester5.add_modul(Modul("Wahlpflichtmodul 2", 8))
-    semester5.add_modul(Modul("Wahlpflichtmodul 3", 8))
-    semester5.add_modul(Modul("Seminar", 6))
+    semester5.add_modul(Modul("Verteilte Systeme", 5))
+    semester5.add_modul(Modul("Wahlpflichtmodul 2", 5))
+    semester5.add_modul(Modul("Wahlpflichtmodul 3", 5))
+    semester5.add_modul(Modul("Seminar", 5))
     
     semester6 = Semester(6, 30)
-    semester6.add_modul(Modul("Praktikum", 12))
-    semester6.add_modul(Modul("Bachelorarbeit", 12))
-    semester6.add_modul(Modul("Kolloquium", 6))
+    semester6.add_modul(Modul("Praktikum", 10))
+    semester6.add_modul(Modul("Bachelorarbeit", 10))
+    semester6.add_modul(Modul("Kolloquium", 5))
     
     # Add all semesters to study program
     studiengang.add_semester(semester1)

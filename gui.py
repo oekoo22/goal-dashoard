@@ -8,7 +8,7 @@ import os
 from datetime import date
 
 
-# Color scheme from CLAUDE.md
+# Color scheme 
 COLORS = {
     'primary': '#F67280',
     'secondary': '#C06C84', 
@@ -27,7 +27,7 @@ ACCESSIBLE_COLORS = {
         'info': '#0c5460',          # Dark teal for better contrast
         'muted': '#6c757d',         # For secondary text
         'border': '#dee2e6',        # Light borders
-        'shadow': 'rgba(0,0,0,0.15)' # Stronger shadow for light mode
+        'shadow': 'rgba(0,0,0,0.15)'  # Stronger shadow for light mode
     },
     'dark': {
         'bg': '#1E1E1E',

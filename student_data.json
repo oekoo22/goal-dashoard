@@ -127,12 +127,20 @@
         {
           "name": "Machine Learning",
           "ects": 8,
-          "pruefungsleistung": null
+          "pruefungsleistung": {
+            "note": 1.0,
+            "datum": "2025-07-21",
+            "status": "bestanden"
+          }
         },
         {
           "name": "IT-Sicherheit",
           "ects": 8,
-          "pruefungsleistung": null
+          "pruefungsleistung": {
+            "note": 1.0,
+            "datum": "2025-07-21",
+            "status": "bestanden"
+          }
         },
         {
           "name": "Mobile Entwicklung",

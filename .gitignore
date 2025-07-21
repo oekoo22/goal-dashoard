@@ -92,11 +92,8 @@ docs/_build/
 .env.local
 .env.*.local
 
-# Project Specific
-# Keep student_data.json as it's demo data
-# Keep eval-assets/ as they contain design references
-
 # Planning
+abstract.md
 .claude
 CLAUDE.md
 specs.md
